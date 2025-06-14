@@ -29,7 +29,11 @@ Lihat 6 bentuk shape di bawah ini. Urutkan berdasarkan preferensimu dari **palin
 
 # --- Load 6 acak shape dari folder ---
 all_shapes = os.listdir("shapes")
-selected_shapes = random.sample(all_shapes, 6)
+if "selected_shapes" not in st.session_state:
+    st.session_state.selected_shapes = random.sample(all_shapes, 6)
+
+selected_shapes = st.session_state.selected_shapes
+
 shape_labels = [shape.replace(".png", "").replace("-", " ").title() for shape in selected_shapes]
 
 # --- Tampilkan bentuk dan input ranking ---
@@ -54,5 +58,6 @@ if st.button("📩 Submit Preferensi"):
         try:
             worksheet.append_row(row)
             st.success("✅ Preferensi kamu berhasil dikirim. Terima kasih!")
+            del st.session_state.selected_shapes
         except Exception as e:
             st.error(f"❌ Gagal menyimpan ke Google Sheets: {e}")
